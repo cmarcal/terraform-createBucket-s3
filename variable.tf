@@ -1,9 +1,9 @@
 variable "aws_access_key" {
-    default = "${AWS_ACCESS_KEY}"
+    default = ""
 }
 
 variable "aws_secret_key" {
-    default = "${AWS_SECRET_KEY}"
+    default = ""
 }
 
 variable "region" {
