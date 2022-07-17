@@ -7,5 +7,5 @@ variable "aws_secret_key" {
 }
 
 variable "region" {
-    default = "${AWS_REGION}"
+    default = "us-east-1"
 } 
