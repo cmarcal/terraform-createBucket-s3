@@ -26,9 +26,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Extract branch name
-        shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
         id: extract_branch
+        run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
 
       - name: Terraform Init
         run: terraform init
