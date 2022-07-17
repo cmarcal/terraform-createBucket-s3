@@ -14,7 +14,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          args: '-var="aws_access_key=${{secrets.AWS_ACCESS_KEY_ID}}", -var="aws_secret_key=${{AWS_SECRET_ACCESS_KEY}}"'
+          args: '-var="aws_access_key=${{secrets.AWS_ACCESS_KEY_ID}}", -var="aws_secret_key=${{secrets.AWS_SECRET_ACCESS_KEY}}"'
 
       - name: Terraform Init
         run: terraform init
