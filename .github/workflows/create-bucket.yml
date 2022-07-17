@@ -20,7 +20,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Check
-        run: terraform plan -auto-approve
+        run: terraform plan -input=true
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply -input=true
