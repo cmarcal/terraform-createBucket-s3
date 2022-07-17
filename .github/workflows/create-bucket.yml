@@ -30,12 +30,16 @@ jobs:
         run: terraform init
 
       - name: Terraform Check
+        with:
+          args: '-var="bucket_name=robertocm-first-bucket-terraform-3"'
         env:
           AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: terraform plan -input=true
 
       - name: Create bucket
+        with:
+          args: '-var="bucket_name=robertocm-first-bucket-terraform-3"'
         env:
           AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
