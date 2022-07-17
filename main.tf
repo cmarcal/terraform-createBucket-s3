@@ -6,5 +6,5 @@ provider "aws" {
 
 module "s3" {
     source = "./s3"
-    bucket_name = "robertocm-first-bucket-terraform"       
+    bucket_name = "robertocm-first-bucket-terraform-2"       
 }
