@@ -4,8 +4,8 @@ on:
     branches:
       - "*"
 jobs:
-  terraform:
-    name: 'Terraform'
+  setup_dependencies: 
+    name: Config Terraform
     runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout
@@ -16,6 +16,14 @@ jobs:
         with:
           args: '-var="aws_access_key=${{secrets.AWS_ACCESS_KEY_ID}}" -var="aws_secret_key=${{secrets.AWS_SECRET_ACCESS_KEY}}"'
 
+  create_bucket:
+    name: 'Terraform'
+    needs: [setup_dependencies]
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Terraform Init
         run: terraform init
 
@@ -25,7 +33,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: terraform plan -input=true
 
-      - name: Terraform Apply
+      - name: Create bucket
         env:
           AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
