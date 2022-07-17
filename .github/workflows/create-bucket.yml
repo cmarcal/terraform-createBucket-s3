@@ -25,6 +25,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
       - name: Terraform Init
         run: terraform init
 
@@ -32,10 +37,10 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform plan -input=true -var="auto_bucket_name=robertocm-first-bucket-terraform-3"
+        run: terraform plan -input=true -var="${{ steps.extract_branch.outputs.branch }}"
 
       - name: Create bucket
         env:
           AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform apply -auto-approve -input=false -var="auto_bucket_name=robertocm-first-bucket-terraform-3"
+        run: terraform apply -auto-approve -input=false -var="${{ steps.extract_branch.outputs.branch }}"
