@@ -27,10 +27,14 @@ jobs:
 
       - name: Extract branch name
         id: extract_branch
-        run: echo ::set-output name=short_ref::$(git rev-parse --short HEAD)
+        run: |
+          branch_name=$(git rev-parse --abbrev-ref HEAD)
+          commit_hash=$(git log --pretty=format:"%H" main..$branch_name --reverse | head -n1)
+          echo ::set-output name=hash_name_bucket::$(assets-zap-$commit_hash)
+
 
       - name: Echo name
-        run: echo ${{ steps.extract_branch.outputs.short_ref }}
+        run: echo ${{ steps.extract_branch.outputs.hash_name_bucket }}
 
       # - name: Terraform Init
       #   run: terraform init
@@ -39,10 +43,10 @@ jobs:
       #   env:
       #     AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
       #     AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #   run: terraform plan -input=true -var="${{ steps.extract_branch.outputs.short_ref }}"
+      #   run: terraform plan -input=true -var="auto_bucket_name=${{ steps.extract_branch.outputs.short_ref }}"
 
       # - name: Create bucket
       #   env:
       #     AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
       #     AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #   run: terraform apply -auto-approve -input=false -var="${{ steps.extract_branch.outputs.short_ref }}"
+      #   run: terraform apply -auto-approve -input=false -var="auto_bucket_name=${{ steps.extract_branch.outputs.short_ref }}"
