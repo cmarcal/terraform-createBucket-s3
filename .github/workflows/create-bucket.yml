@@ -32,7 +32,7 @@ jobs:
         id: extract_branch
         run: |
           echo branch_name=${GITHUB_HEAD_REF}
-          echo commit_hash=$(git log --pretty=format:"%H" main..$branch_name --reverse | head -n1)
+          echo commit_hash=$(git log --pretty=format:"%H" main..${GITHUB_HEAD_REF} --reverse | head -n1)
           echo ::set-output name=hash_name_bucket::assets-zap-$($commit_hash)
 
 
