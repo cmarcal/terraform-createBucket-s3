@@ -25,13 +25,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.ref }}
+          ref: main
           fetch-depth: 0
 
       - name: Extract branch name
         id: extract_branch
         run: |
-          echo branch_name=${GITHUB_HEAD_REF}
           echo commit_hash=$(git log --pretty=format:"%H" main..${GITHUB_HEAD_REF} --reverse | head -n1)
           echo ::set-output name=hash_name_bucket::assets-zap-$($commit_hash)
 
