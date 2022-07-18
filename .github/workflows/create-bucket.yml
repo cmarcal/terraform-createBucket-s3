@@ -32,7 +32,7 @@ jobs:
         id: extract_branch
         run: |
           commit_hash=$(git log --pretty=format:"%H" origin/main..origin/${GITHUB_HEAD_REF} --reverse | head -n1)
-          echo ::set-output name=hash_name_bucket::assets-zap-$($commit_hash)
+          echo ::set-output name=hash_name_bucket::$('assets-zap-'$commit_hash)
 
 
       - name: Echo name
