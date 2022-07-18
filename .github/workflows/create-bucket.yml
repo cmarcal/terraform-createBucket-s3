@@ -25,14 +25,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: main
           fetch-depth: 0
 
       - name: Extract branch name
         id: extract_branch
         run: |
           branch_name=$(git rev-parse --abbrev-ref HEAD)
-          commit_hash=$(git log --pretty=format:"%H" main..$branch_name --reverse | head -n1)
+          commit_hash=$(git log --pretty=format:"%H" 'main'..$branch_name --reverse | head -n1)
           echo ::set-output name=hash_name_bucket::$($branch_name)
 
 
