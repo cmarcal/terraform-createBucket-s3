@@ -30,7 +30,7 @@ jobs:
       - name: Extract branch name
         id: extract_branch
         run: |
-          echo branch_name=${{GITHUB_HEAD_REF}}
+          echo branch_name=${GITHUB_HEAD_REF}
           echo commit_hash=${{  github.event.commits[0].message }}
           echo ::set-output name=hash_name_bucket::assets-zap-$($commit_hash)
 
