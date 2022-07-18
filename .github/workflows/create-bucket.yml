@@ -30,7 +30,7 @@ jobs:
       - name: Set Bucket name
         id: generete_bucket_name
         run: |
-          commit_hash=$(git log --pretty=format:"%H" origin/main..origin/${GITHUB_HEAD_REF} --reverse | head -n1)
+          commit_hash=$(git log --pretty=format:"%h" origin/main..origin/${GITHUB_HEAD_REF} --reverse | head -n1)
           name_bucket=assets-zap-$commit_hash
           echo ::set-output name=bucket_name::$name_bucket
 
