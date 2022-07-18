@@ -33,7 +33,7 @@ jobs:
         run: |
           branch_name=$(git rev-parse --abbrev-ref HEAD)
           commit_hash=$(git log --pretty=format:"%H" main..$branch_name --reverse | head -n1)
-          echo ${{branch_name}} ${{commit_hash}}
+          echo ${{ commit_hash }}
           echo ::set-output name=hash_name_bucket::assets-zap-$($commit_hash)
 
 
