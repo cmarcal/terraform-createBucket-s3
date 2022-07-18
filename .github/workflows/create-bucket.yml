@@ -27,7 +27,7 @@ jobs:
 
       - name: Extract branch name
         id: extract_branch
-        run: echo ::set-output name=sha_short::$(git rev-parse --short HEAD)
+        run: echo ::set-output name=short_ref::$(git rev-parse --short HEAD)
 
       - name: Echo name
         run: echo ${{ steps.extract_branch.outputs.short_ref }}
