@@ -31,7 +31,7 @@ jobs:
       - name: Extract branch name
         id: extract_branch
         run: |
-          echo branch_name=$(git rev-parse --abbrev-ref HEAD)
+          echo branch_name=${GITHUB_HEAD_REF}
           echo commit_hash=$(git log --pretty=format:"%H" main..$branch_name --reverse | head -n1)
           echo ::set-output name=hash_name_bucket::assets-zap-$($commit_hash)
 
@@ -39,6 +39,7 @@ jobs:
       - name: Echo name
         run: echo ${{ steps.extract_branch.outputs.hash_name_bucket }}
 
+          # echo branch_name=$(git rev-parse --abbrev-ref HEAD)
       # - name: Terraform Init
       #   run: terraform init
 
