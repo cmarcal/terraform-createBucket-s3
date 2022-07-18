@@ -23,7 +23,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           ref: main
           fetch-depth: 0
@@ -31,9 +31,9 @@ jobs:
       - name: Extract branch name
         id: extract_branch
         run: |
-          branch_name=$(git rev-parse --abbrev-ref HEAD)
-          commit_hash=$(git log --pretty=format:"%H" 'main'..$branch_name --reverse | head -n1)
-          echo ::set-output name=hash_name_bucket::$($branch_name)
+          echo branch_name=$(git rev-parse --abbrev-ref HEAD)
+          echo commit_hash=$(git log --pretty=format:"%H" main..$branch_name --reverse | head -n1)
+          echo ::set-output name=hash_name_bucket::assets-zap-$($commit_hash)
 
 
       - name: Echo name
