@@ -27,19 +27,22 @@ jobs:
 
       - name: Extract branch name
         id: extract_branch
-        run: echo ::set-output name=short_ref::${GITHUB_REF#refs/*/}
+        run: echo ::set-output name=sha_short::$(git rev-parse --short HEAD)
 
-      - name: Terraform Init
-        run: terraform init
+      - name: Echo name
+        run: echo ${{ steps.extract_branch.outputs.short_ref }}
 
-      - name: Terraform Check
-        env:
-          AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform plan -input=true -var="${{ steps.extract_branch.outputs.short_ref }}"
+      # - name: Terraform Init
+      #   run: terraform init
 
-      - name: Create bucket
-        env:
-          AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform apply -auto-approve -input=false -var="${{ steps.extract_branch.outputs.short_ref }}"
+      # - name: Terraform Check
+      #   env:
+      #     AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #   run: terraform plan -input=true -var="${{ steps.extract_branch.outputs.short_ref }}"
+
+      # - name: Create bucket
+      #   env:
+      #     AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #   run: terraform apply -auto-approve -input=false -var="${{ steps.extract_branch.outputs.short_ref }}"
