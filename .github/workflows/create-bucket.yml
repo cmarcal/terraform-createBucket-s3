@@ -35,7 +35,7 @@ jobs:
         id: generete_bucket_name
         run: |
           respository_name=${{ github.event.repository.name }}
-          pr_number="teste"
+          pr_number="31231"
           name_bucket=$respository_name-$pr_number
           echo "bucket_name=${name_bucket}">> $GITHUB_OUTPUT
 
@@ -46,7 +46,7 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform plan -input=true -var="auto_bucket_name=${{ steps.generete_bucket_name.outputs.bucket_name }}"
+        run: terraform plan -input=true -var="auto_bucket_name="${{ steps.generete_bucket_name.outputs.bucket_name }}""
 
       - name: Create bucket
         env:
