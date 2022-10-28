@@ -36,7 +36,7 @@ jobs:
           respository_name=${{ github.event.repository.name }}
           pr_number=${{ github.event.pull_request.number }}
           name_bucket=$respository_name-$pr_number
-          echo "bucket_name=${{name_bucket}}">> $GITHUB_OUTPUT
+          echo "bucket_name=${name_bucket}">> $GITHUB_OUTPUT
 
       - name: Terraform Init
         run: terraform init
