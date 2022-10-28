@@ -1,6 +1,8 @@
 name: 'Create Bucket - Terraform'
 on:
   pull_request:
+    types:
+      - opened
     branches:
       - "*"
 jobs:
