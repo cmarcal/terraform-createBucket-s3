@@ -1,5 +1,6 @@
 name: 'Create Bucket - Terraform'
 on:
+  workflow_dispatch:
   pull_request:
     types:
       - opened
@@ -29,12 +30,14 @@ jobs:
         with:
           fetch-depth: 0
 
+
       - name: Set Bucket name
         id: generete_bucket_name
         run: |
-          commit_hash=$(git log --pretty=format:"%h" origin/main..origin/${GITHUB_HEAD_REF} --reverse | head -n1)
-          name_bucket=assets-zap-$commit_hash
-          echo ::set-output name=bucket_name::$name_bucket
+          respository_name=${{ github.event.repository.name }}
+          pr_number="31231"
+          name_bucket=$respository_name-$pr_number
+          echo "bucket_name=${name_bucket}">> $GITHUB_OUTPUT
 
       - name: Terraform Init
         run: terraform init
@@ -49,4 +52,4 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform apply -auto-approve -input=false -var="auto_bucket_name=${{ steps.generete_bucket_name.outputs.bucket_name }}"
+        run: terraform apply -auto-approve -input=true -var="auto_bucket_name=${{ steps.generete_bucket_name.outputs.bucket_name }}"
