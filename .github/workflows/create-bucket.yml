@@ -35,7 +35,7 @@ jobs:
         id: generete_bucket_name
         run: |
           respository_name=${{ github.event.repository.name }}
-          pr_number=${{github.event.number}} || ${{github.event.issue.number}}
+          pr_number=${{github.event.number || github.event.issue.number}}
           name_bucket=$respository_name-$pr_number
           echo "bucket_name=${name_bucket}">> $GITHUB_OUTPUT
 
