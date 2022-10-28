@@ -34,9 +34,9 @@ jobs:
         id: generete_bucket_name
         run: |
           respository_name=${{ github.event.repository.name }}
-          pr_name=${{ github.event.number }}
-          name_bucket=$respository_name-$pr_name
-          echo "$bucket_name=$name_bucket">> $GITHUB_OUTPUT
+          pr_number=${{ github.event.issue.number }}
+          name_bucket=$respository_name-$pr_number
+          echo "${bucket_name}=${name_bucket}">> $GITHUB_OUTPUT
 
       - name: Terraform Init
         run: terraform init
