@@ -46,10 +46,10 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform plan -input=true -var="auto_bucket_name="${{ steps.generete_bucket_name.outputs.bucket_name }}""
+        run: terraform plan -input=true -var="auto_bucket_name=${{ steps.generete_bucket_name.outputs.bucket_name }}"
 
       - name: Create bucket
         env:
           AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform apply -auto-approve -input=false -var="auto_bucket_name=${{ steps.generete_bucket_name.outputs.bucket_name }}"
+        run: terraform apply -auto-approve -input=true -var="auto_bucket_name=${{ steps.generete_bucket_name.outputs.bucket_name }}"
