@@ -33,9 +33,10 @@ jobs:
       - name: Set Bucket name
         id: generete_bucket_name
         run: |
-          commit_hash=$(git log --pretty=format:"%h" origin/main..origin/${GITHUB_HEAD_REF} --reverse | head -n1)
-          name_bucket=assets-zap-$commit_hash
-          echo "{bucket_name}={$name_bucket}">> $GITHUB_OUTPUT
+          respository_name=${{ github.event.repository.name }}
+          pr_name=${{ github.event.number }}
+          name_bucket=$respository_name-$pr_name
+          echo "$bucket_name=$name_bucket">> $GITHUB_OUTPUT
 
       - name: Terraform Init
         run: terraform init
