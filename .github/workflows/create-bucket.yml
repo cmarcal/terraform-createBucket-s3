@@ -33,11 +33,9 @@ jobs:
 
       - name: Set Bucket name
         id: generete_bucket_name
-        env:
-         GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           respository_name=${{ github.event.repository.name }}
-          pr_number=$(gh pr view --json number -q .number || echo "")
+          pr_number=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
           name_bucket=$respository_name-$pr_number
           echo "bucket_name=${name_bucket}">> $GITHUB_OUTPUT
 
