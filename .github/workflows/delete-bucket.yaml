@@ -6,16 +6,30 @@ on:
       - "*"
 
 jobs:
-  if_merged:
+  check_merged:
+    name: Merge Branch
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
     - run: |
         echo The PR was merged
 
+  config_terraform:       
+    name: Config Terraform
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          args: '-var="aws_access_key=${{secrets.AWS_ACCESS_KEY_ID}}" 
+                 -var="aws_secret_key=${{secrets.AWS_SECRET_ACCESS_KEY}}"'
+
   delete_bucket:
     name: Delete bucket
-    needs: if_merged
+    needs: [check_merged, config_terraform]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
