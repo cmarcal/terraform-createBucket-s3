@@ -1,0 +1,52 @@
+name: 'Create Bucket - Terraform'
+on:
+  pull_request:
+    types:
+      - opened
+    branches:
+      - "*"
+jobs:
+  setup_dependencies: 
+    name: Config Terraform
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          args: '-var="aws_access_key=${{secrets.AWS_ACCESS_KEY_ID}}" 
+                 -var="aws_secret_key=${{secrets.AWS_SECRET_ACCESS_KEY}}"'
+
+  create_bucket:
+    name: Create Bucket
+    needs: [setup_dependencies]
+    runs-on: 'ubuntu-latest'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set Bucket name
+        id: generete_bucket_name
+        run: |
+          commit_hash=$(git log --pretty=format:"%h" origin/main..origin/${GITHUB_HEAD_REF} --reverse | head -n1)
+          name_bucket=assets-zap-$commit_hash
+          echo ::set-output name=bucket_name::$name_bucket
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Check
+        env:
+          AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: terraform plan -input=true -var="auto_bucket_name=${{ steps.generete_bucket_name.outputs.bucket_name }}"
+
+      - name: Create bucket
+        env:
+          AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: terraform apply -auto-approve -input=false -var="auto_bucket_name=${{ steps.generete_bucket_name.outputs.bucket_name }}"

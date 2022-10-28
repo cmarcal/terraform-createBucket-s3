@@ -1,11 +1,15 @@
 variable "aws_access_key" {
-    default = "${AWS_ACCESS_KEY}"
+    default = ""
 }
 
 variable "aws_secret_key" {
-    default = "${AWS_SECRET_KEY}"
+    default = ""
 }
 
 variable "region" {
-    default = "${AWS_REGION}"
+    default = "us-east-1"
 } 
+
+variable "auto_bucket_name" {
+    default = ""
+}

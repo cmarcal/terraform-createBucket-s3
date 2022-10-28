@@ -1,0 +1,43 @@
+name: 'Delete Bucket - Terraform'
+on: 
+  pull_request: 
+    types: [closed]
+    branches:
+      - "*"
+
+jobs:
+  if_merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo The PR was merged
+
+  delete_bucket:
+    name: Delete bucket
+    needs: if_merged
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get Bucket name
+        id: generete_bucket_name
+        run: |
+          commit_hash=$(git log --pretty=format:"%h" origin/main..origin/${GITHUB_HEAD_REF} --reverse | head -n1)
+          name_bucket=assets-zap-$commit_hash
+          echo ::set-output name=bucket_name::$name_bucket
+
+      - name: Terraform Check
+        env:
+          AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: terraform plan -input=true -var="auto_bucket_name=${{ steps.generete_bucket_name.outputs.bucket_name }}"
+
+      - name: Delete bucket
+        env:
+          AWS_ACCESS_KEY_ID:  ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY:  ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: terraform destroy -auto-approve -input=true -target={{ steps.generete_bucket_name.outputs.bucket_name }}
